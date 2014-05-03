@@ -1,0 +1,4 @@
+- use https://github.com/wstephenson/klyde/tree/master/startup/kde-session-units as inspiration
+- don't make use of start_kdeinit_wrapper which is just a hack. See also:
+  https://projects.kde.org/projects/frameworks/kinit/repository/revisions/master/entry/src/start_kdeinit/start_kdeinit_wrapper.c#L31
+- dbus-1.6.8 provides an incompatible xinitrc.d/80-dbus file which sets the wrong DBUS_SESSION_BUS_ADDRESS environment variable
