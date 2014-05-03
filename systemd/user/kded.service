@@ -1,0 +1,12 @@
+[Unit]
+Description=KDE Service Components Manager 
+# For some reason, dbus.service isn't spawned by only requiring dbus.socket.
+# Needs some investigation...
+Requires=dbus.socket dbus.service
+After=dbus.socket dbus.service
+#AllowIsolate=true
+
+[Service]
+ExecStart=/usr/bin/kded5
+BusName=org.kde.kded5
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus"

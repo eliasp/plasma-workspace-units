@@ -1,0 +1,8 @@
+[Unit]
+Description=D-Bus User Bus Socket
+
+[Socket]
+# For systemd v209 and above
+ListenStream=%t/bus
+# For systemd v208 and below
+#ListenStream=%t/dbus/user_bus_socket
