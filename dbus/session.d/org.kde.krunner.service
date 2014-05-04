@@ -1,4 +1,4 @@
 [D-BUS Service]
 Name=org.kde.krunner
 Exec=/usr/bin/krunner
-
+SystemdService=krunner.service
