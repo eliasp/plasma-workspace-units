@@ -1,0 +1,80 @@
+[19:11:26] <eliasp> how does one deal with self-healing services? e.g. a lot of KDE components (e.g. kwin) restart themselves after a crash… but my service status is then shown as "failed" … is there a way for systemd to track such self-restarting services properly?
+[19:16:08] <pcrd> Well, that's why, ideally, a systemd user instance should restart them. But DEs are not ready for that yet :)
+[19:24:20] <eliasp> yep… ;) I'm trying to get a bit done in this area at least, but run every other day into a dozen troubles
+[19:25:55] <eliasp> hmm, for KDE stuff, this might actually be relatively trivial to do… every KDE application uses the global KCrash handler which is also AFAICS responsible for dealing with restarts etc. … so this crash handler "just" needs to detect whether the running application is a user service or not…
+[19:26:21] <eliasp> … and then delegate the "restart" to systemd
+[19:28:21] <brain0> eliasp: pcrd is correct, if such a service is adjusted for systemd, it should always rely on systemd restarting it
+[19:29:02] <eliasp> brain0: ok… so what's the correct deterministic way for an application to detect whether it was started as systemd (user-)service?
+[19:29:58] <brain0> the best way would be a special command line flag like --systemd
+[19:30:57] <eliasp> ok, so nothing like introspection via dbus, /proc or whatever else…
+[19:31:01] <brain0> I don't think systemd sets a special environment flag
+[19:31:07] <pcrd> iow, all commands started by systemd service units should be enhanced and invoked with a new --systemd command-line option, and then use that to determine whether or not program is run under systemd
+[19:31:26] <brain0> yes, that would be the sanest way
+[19:31:47] <brain0> for the restart handling, the kde crash handler could still be used btw
+[19:31:55] <eliasp> k, I'll try to get something moved towards this direction… 
+[19:31:56] <pcrd> querying systemd via dbus only tells you that it's there, not necessarily that it started it
+[19:32:04] <brain0> it could listen on the bus for failed services and handle the restarting via systemd
+[19:32:10] <pcrd> Lennart may have the ultimate answer though
+[19:32:12] <eliasp> brain0: right
+[19:32:14] <eliasp> pcrd: ok
+[19:32:27] <brain0> I don't think lennart will add anything else
+[19:32:59] <eliasp> I just want sane solutions… not any dirty hacks, workarounds or whatever… now that systemd provides the chance to do things "right", they should be done "right"
+[19:33:10] <eliasp> so what you suggested sounds relatively sane ;)
+[19:35:31] <brain0> yes, so my summary would be: 1) if the application needs to behave differently when run under systemd, add a --systemd flag, 2) the kde crash handler should listen to systemd on the bus and in this way keep track of failed user services, it can then tell systemd what to restart, if appropriate
+[19:35:48] <brain0> 3) all services should use sd_notify() when run as --systemd to indicate their status
+[19:36:06] <brain0> 4) they should also use sd_notify's watchdog functionality so that systemd knows when they crashed
+[19:39:15] <eliasp> brain0: great… will put this backlog into the TODO file and add some investigation results regarding KCrash/KApplication interna… thanks a lot for the input
+[19:39:23] <brain0> and they should never fork (forking is a bad idea combined with systemd user instances)
+[19:39:47] <brain0> are you working on KDE's systemd support
+[19:39:50] <eliasp> brain0: well, that's what a lot of KDE SC applications are know for… forking away ;-/
+[19:40:26] <eliasp> brain0: so far only trying to get a full KF5/Plasma Workspaces session running as user-session… then I'll try to get some core KDE devs onto the results of this work
+[19:40:56] <eliasp> brain0: I know that there has been the wish since years to improve the KDE startup/session management situation… and now that there's systemd, it provides more or less all that's needed
+[19:41:16] <eliasp> in the end, even 'kded' could rely on systemd to spawn the KDE services it used to manage on its own
+[19:41:25] <brain0> eliasp: the problem is: when a process runs under systemd, systemd listens for SIGCHLD to determine whether it exited - when it forks away, it is no longer a child of the systemd user instances, but of PID 1, thus your user instance will "miss" a possible crash
+[19:41:41] <brain0> therefore, forking is particularly bad with user instances (they will also warn about this)
+[19:42:11] <falconindy> brain0: i don't think that's true
+[19:42:20] <falconindy> brain0: pretty sure user instances are made to be process subreapers
+[19:42:25] <eliasp> brain0: yes, I know… and due to the fact, that nearly every KDE application makes use of KApplication, it should be possible to deal with this relatively easy by just making sure the KApplication lib has proper systemd support
+[19:42:27] <brain0> indeed, I would love to see this work successful
+[19:42:36] <falconindy> 1618         if (arg_running_as == SYSTEMD_USER) {
+[19:42:36] <falconindy> 1619                 /* Become reaper of our children */
+[19:42:36] <falconindy> 1620                 if (prctl(PR_SET_CHILD_SUBREAPER, 1) < 0) {
+[19:42:55] <brain0> falconindy: May 02 14:34:59 karif systemd[1872]: minecraft.service: Supervising process 2228 which is not our child. We'll most likely not notice when it exits.
+[19:43:22] <falconindy> i don't have enough context to understand what that means
+[19:43:37] <brain0> me neither, I just always assumed that the problem is reparenting
+[19:44:27] <brain0> but from man prctl, it seems you are correct
+[19:44:38] <falconindy> awk '{ print $4 }' /proc/2228/stat
+[19:44:42] <falconindy> that's the PPID of 2228
+[19:45:24] <brain0> anyway, systemd complains whenever the main pid is not a direct child
+[19:45:29] <brain0> there must be a reason for that
+[19:47:24] <brain0> eliasp: the modularization of frameworks 5 will hopefully help :)
+[19:47:52] <eliasp> brain0: I hope so… 
+[19:48:41] <falconindy> probably because it'll most likely not notice when it exits.
+[19:48:54] <brain0> note that there have been some plans from some KDE guys to support systemd instead of kded
+[19:49:04] <brain0> Martin Gräßlin said something related to this
+[19:49:05] <falconindy> i suspect the problem is that 2228 *doesnt* reparent
+[19:49:21] <falconindy> it's a grandchild process, not a child
+[19:49:22] <eliasp> brain0: any references? the last thing I remember was "sessionk" ~2 years ago
+[19:49:39] <brain0> search for systemd in martin gräßlin's G+
+[19:49:48] <eliasp> brain0: I'll do… :)
+[19:49:56] <brain0> maybe also in Aaron Seigo's
+[19:50:29] <brain0> but he is more sceptical towards systemd than Martin
+[19:51:17] <eliasp> brain0: yes… and I have no idea why… he always used to be a strong supporter of "proper" concepts such as systemd
+[19:52:44] <brain0> his only concern is that he doesn't want to require systemd exclusively
+[19:54:27] <eliasp> brain0: sure, but to my understanding the outcome of this discussion has always been "leave the old startkde approach for legacy systems, move forward to systemd-based implementations as primary implementation"
+[19:54:53] <eliasp> brain0: I'll try to get the discussion running again on kde-devel or so once I cleaned up + documented all this…
+[19:55:21] <brain0> some proof-of-concept implementation would always help
+[19:55:27] <brain0> please, also make sure to post somethi
+[19:55:49] <eliasp> brain0: exactly… that's what I'm working on… I have a lot of user-session units ready by now and try to fix remaining issues
+[19:55:53] <brain0> please, also make sure to post something to systemd-devel when there is a concept, there's always some good remarks from people there
+[19:56:02] <brain0> to avoid doing it "wrong" int he end
+[19:56:03] <eliasp> ok
+[19:56:58] <brain0> IMO, the most important part is having optional support for non-forking + sd_notify for everything
+[19:57:12] <brain0> this will solve soooo many problems
+[19:57:14] <eliasp> I still miss some understanding of KDE service dependencies (ksmserver vs kded vs kcminit vs …) … how do they depend on each other, what specific things does each of them do etc.
+[19:57:34] <eliasp> I know what they do in general, but all too often I run into some weird stuff they're doing or simply ugly hacks
+[20:02:51] <eliasp> one of the nice things I ran into: it seems kwin handles a SIGTERM only when there's user activity… otherwise it seems the main-loop tries to do nothing whenever possible… therefore '… restart kwin.service' will take up to 60 seconds (depending on whether the user moves his mouse, changes window focus etc.) after which kwin is then SIGKILLed instead :)
+[20:03:16] <eliasp> my TODO/known issues section keeps growing and growing ;)
+[20:03:33] <brain0> uh
+[20:03:37] <brain0> signalfd ftw :)
+[20:03:40] <brain0> but that is linux only
