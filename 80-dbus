@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# launches a session dbus instance
+
+# check first, whether a systemd user-session is running where the session dbus instance is
+# started as a systemd user service
+DBUS_SERVICE="dbus.service"
+systemctl="`which systemctl 2>/dev/null`"
+if [ -n "$systemctl" ] && [ -x "$systemctl" ] && $systemctl is-active user@$(id -u).service &>/dev/null; then
+    $systemctl --user start $DBUS_SERVICE &>/dev/null
+    export DBUS_SESSION_BUS_ADDRESS="unix:path="${XDG_RUNTIME_DIR}"/bus"
+fi
+
+dbuslaunch="`which dbus-launch 2>/dev/null`"
+if [ -n "$dbuslaunch" ] && [ -x "$dbuslaunch" ] && [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+  if [ -n "$command" ]; then
+    command="$dbuslaunch --exit-with-session $command"
+  else
+    eval `$dbuslaunch --sh-syntax --exit-with-session`
+  fi
+fi
+

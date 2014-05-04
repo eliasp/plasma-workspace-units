@@ -1,0 +1,5 @@
+systemd.desktop to /usr/share/xsessions/
+80-dbus         to /etc/X11/xinit/xinitrc.d/ # Gentoo specific, other distributions might have something similar
+startsystemd    to /usr/local/bin/
+systemd/user    to /etc/systemd/
+#dbus/session.d  to TODO

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# make sure, the systemd user-session get's all env variables like DISPLAY, XAUTHORITY etc. first before launching any services
+systemctl --user import-environment
+
+#systemctl --user start kwin.service
+systemctl --user start plasma-workspace.target
+
+# now this is so ugly, I'm not even ashamed of it... I'm proud of doing such ugly things...
+# to prevent X from terminating immediately at this point (as all 'systemctl' operations go to background), we have to make X
+# wait for something...
+# ... something
+read
+# ooooh, beautiful
+
+systemctl --user stop plasma-workspace.target

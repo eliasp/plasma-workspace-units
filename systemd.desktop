@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=systemd user-session
+Comment=Run a systemd user-session
+Exec=/usr/bin/startsystemd
+Icon=
+Type=Application
