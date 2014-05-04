@@ -2,3 +2,6 @@
 Description=KDE Plasma Workspace
 Requires=plasma-workspace.service window-manager.service launcher.service
 Wants=kwalletd.service
+
+[Install]
+Alias=workspace.target
