@@ -1,11 +1,6 @@
 [Unit]
 Description=KDE Plasma Workspace Transaction Monitor
-# For some reason, dbus.service isn't spawned by only requiring dbus.socket.
-# Needs some investigation...
-Requires=dbus.socket dbus.service
-After=dbus.socket dbus.service
 Before=plasma-shell.service
-#AllowIsolate=true
 
 [Service]
 ExecStart=/usr/bin/kuiserver
