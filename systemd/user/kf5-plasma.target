@@ -1,6 +1,0 @@
-[Unit]
-Description=KDE Frameworks 5/Plasma
-Wants=wm.target
-
-[Install]
-Alias=default.target
