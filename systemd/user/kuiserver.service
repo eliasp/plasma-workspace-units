@@ -4,9 +4,10 @@ Description=KDE Service Components Manager
 # Needs some investigation...
 Requires=dbus.socket dbus.service
 After=dbus.socket dbus.service
+Before=plasma-shell.service
 #AllowIsolate=true
 
 [Service]
-ExecStart=/usr/bin/kded5
-BusName=org.kde.kuiserver JobViewServer
+ExecStart=/usr/bin/kuiserver
+BusName=org.kde.kuiserver org.kde.JobViewServer
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
