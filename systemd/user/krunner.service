@@ -9,7 +9,7 @@ After=dbus.socket dbus.service
 [Service]
 ExecStart=/usr/bin/krunner
 BusName=org.kde.krunner
-Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus"
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
 
 [Install]
 Alias=launcher.service

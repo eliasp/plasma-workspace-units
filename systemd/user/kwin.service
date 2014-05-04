@@ -11,8 +11,7 @@ After=dbus.socket dbus.service
 [Service]
 ExecStart=/usr/bin/kwin --replace
 BusName=org.kde.KWin
-Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus"
-#Type=dbus
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
 
 [Install]
 Alias=window-manager.service
