@@ -1,7 +1,5 @@
 - Make sure a replacement for `kcheckrunning` is either found or not needed anymore
 
-- Make sure, the existence of ~/.config is handled wherever needed (KConfig?)
-
 - Fix the insanity of `kstartupconfig`
   - is `kstartupconfig` needed at all in the context of a systemd user-session?
   - `kstartupconfig`'s code is an ugly hack, full of 'goto' and with a nice 'system()' at the end
