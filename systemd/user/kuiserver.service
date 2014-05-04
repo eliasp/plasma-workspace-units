@@ -1,5 +1,5 @@
 [Unit]
-Description=KDE Service Components Manager 
+Description=KDE Plasma Workspace Transaction Monitor
 # For some reason, dbus.service isn't spawned by only requiring dbus.socket.
 # Needs some investigation...
 Requires=dbus.socket dbus.service
