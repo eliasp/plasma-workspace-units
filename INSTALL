@@ -3,3 +3,14 @@ systemd.desktop to /usr/share/xsessions/
 startsystemd    to /usr/local/bin/
 systemd/user    to /etc/systemd/
 #dbus/session.d  to TODO
+
+Run:
+systemctl --user enable krunner.service
+systemctl --user enable kwin.service
+systemctl --user enable plasma-shell.service
+systemctl --user enable plasma-workspace.target
+
+Restart the Login Manager
+Select 'systemd user-session'
+Login
+Have fun... or not
