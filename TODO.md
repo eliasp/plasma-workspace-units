@@ -14,3 +14,31 @@
   we get valuable input in the early project phase to steer the efforts into the right direction
 
 - Extract relevant information from [IRC Log](IRC-Log)
+
+- Figure out how to register `ksmserver` as `Leader` for the logind session. Currently the display-manager (sddm) is
+  registered as `Leader` (`loginctl show-session 1`):
+```
+Id=1
+Name=elias
+Timestamp=Mon 2014-05-05 00:37:18 CEST
+TimestampMonotonic=16782996
+VTNr=7
+Display=:0
+Remote=no
+Service=sddm
+Scope=session-1.scope
+Leader=2639
+Audit=1
+Type=x11
+Class=user
+Active=no
+State=closing
+IdleHint=no
+IdleSinceHint=0
+IdleSinceHintMonotonic=0
+```
+  This leads to issues such as:
+    - Unable to unlock screen
+    - Message `The session is not registered with logind "PID 4970 does not belong to any known session"` in ksmserver journal
+
+  As long as `loginctl show-session 1` doesn't show ksmserver's PID as `Leader`, this issues will persist.
