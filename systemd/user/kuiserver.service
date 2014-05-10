@@ -1,6 +1,6 @@
 [Unit]
 Description=KDE Plasma Workspace Transaction Monitor
-Before=plasma-shell.service
+Before=plasmashell.service
 
 [Service]
 ExecStart=/usr/bin/kuiserver

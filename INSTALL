@@ -7,7 +7,7 @@ systemd/user    to /etc/systemd/
 Run:
 systemctl --user enable krunner.service
 systemctl --user enable kwin.service
-systemctl --user enable plasma-shell.service
+systemctl --user enable plasmashell.service
 systemctl --user enable plasma-workspace.target
 
 Restart the Login Manager
