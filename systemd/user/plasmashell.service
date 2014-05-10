@@ -5,7 +5,7 @@ Requires=ksmserver.service kuiserver.service kded.service
 [Service]
 ExecStart=/usr/bin/plasmashell --no-respawn
 Restart=on-failure
-BusName=org.kde.plasma_shell
+BusName=org.kde.plasmashell
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
 
 [Install]
