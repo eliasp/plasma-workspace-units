@@ -5,5 +5,7 @@ Before=plasmashell.service window-manager.service
 [Service]
 ExecStart=/usr/bin/kactivitymanagerd start
 Type=forking
-BusName=org.kde.ActivityManager
+# Don't define a BusName which would set the Type= to 'dbus' until
+# https://bugs.kde.org/show_bug.cgi?id=335384 is resolved.
+#BusName=org.kde.ActivityManager
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
