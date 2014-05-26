@@ -1,0 +1,9 @@
+[Unit]
+Description=KDE Plasma Workspace Activity Manager
+Before=plasmashell.service window-manager.service
+
+[Service]
+ExecStart=/usr/bin/kactivitymanagerd start
+Type=forking
+BusName=org.kde.ActivityManager
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
