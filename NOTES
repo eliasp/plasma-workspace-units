@@ -5,3 +5,4 @@
 - make sure ksmserver takes control of the session using TakeControl(). See also:
   - http://marc.info/?l=freedesktop-xorg-devel&m=138618357707257&w=2
   - https://groups.google.com/forum/#!msg/xorg-devel/WB7C57IFMbY/9hempSRWk-kJ
+- `kcmshell5 formats` creates `~/.config/plasma-locale-settings.sh` which is meant to be run by startkde... proper solution needed
