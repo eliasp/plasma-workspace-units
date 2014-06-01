@@ -1,5 +1,5 @@
 [Unit]
-Description=KDE 'ksmserver' - TODO
+Description=KDE Session Management Server
 
 [Service]
 ExecStart=/usr/bin/ksmserver
