@@ -1,8 +1,8 @@
 [Unit]
 Description=KDE Session Management Server
+After=kglobalaccel.service
 
 [Service]
 ExecStart=/usr/bin/ksmserver
 BusName=org.kde.ksmserver
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
-After=kglobalaccel.service
