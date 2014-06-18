@@ -42,3 +42,5 @@ IdleSinceHintMonotonic=0
     - Message `The session is not registered with logind "PID 4970 does not belong to any known session"` in ksmserver journal
 
   As long as `loginctl show-session 1` doesn't show ksmserver's PID as `Leader`, this issues will persist.
+
+- Make sure https://projects.kde.org/projects/kde/workspace/plasma-workspace/repository/revisions/b551c6dbd4490b04a0548f40e4fbd5e1feeb0e0e is covered/adopted/translated
