@@ -3,8 +3,7 @@ Description=KDE Plasma Workspace Activity Manager
 Before=plasmashell.service window-manager.service
 
 [Service]
-ExecStart=/usr/bin/kactivitymanagerd start
-Type=forking
+ExecStart=/usr/bin/kactivitymanagerd start-daemon
 # Don't define a BusName which would set the Type= to 'dbus' until
 # https://bugs.kde.org/show_bug.cgi?id=335384 is resolved.
 #BusName=org.kde.ActivityManager
