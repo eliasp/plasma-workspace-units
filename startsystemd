@@ -3,6 +3,9 @@
 # make sure, the systemd user-session get's all env variables like DISPLAY, XAUTHORITY etc. first before launching any services
 systemctl --user import-environment
 
+# if plasma-workspace.target is not enabled bail out
+systemctl --user is-enabled plasma-workspace.target || { xmessage "Please enable plasma-workspace.target"; exit 1; }
+
 #systemctl --user start kwin.service
 systemctl --user start plasma-workspace.target
 
