@@ -6,6 +6,7 @@ Requires=ksmserver.service kuiserver.service kded.service kactivitymanagerd.serv
 ExecStart=/usr/bin/plasmashell --no-respawn
 ExecStop=/usr/bin/kquitapp5 plasmashell
 Restart=on-failure
+KillMode=none
 BusName=org.kde.plasmashell
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
 
