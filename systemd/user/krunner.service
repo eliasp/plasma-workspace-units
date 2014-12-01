@@ -3,6 +3,7 @@ Description=KDE Plasma Workspace Application Launcher
 
 [Service]
 ExecStart=/usr/bin/krunner
+KillMode=none
 BusName=org.kde.krunner
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
 
