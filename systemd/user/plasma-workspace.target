@@ -1,7 +1,7 @@
 [Unit]
 Description=KDE Plasma Workspace
 Requires=plasma-workspace.service window-manager.service launcher.service
-Wants=kwalletd.service
+Wants=kwalletd.service indexer.service
 
 [Install]
 Alias=workspace.target
