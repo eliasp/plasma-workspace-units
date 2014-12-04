@@ -5,4 +5,4 @@ Requires=kdeinit.service
 [Service]
 ExecStart=/usr/bin/kwalletd5
 BusName=org.kde.kwalletd5
-Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" XDG_CURRENT_DESKTOP=KDE KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
