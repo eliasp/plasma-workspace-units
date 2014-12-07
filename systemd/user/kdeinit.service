@@ -3,6 +3,7 @@ Description=KDE 'kdeinit' - TODO
 
 [Service]
 ExecStart=/usr/bin/kdeinit5 +kcminit_startup --no-fork
+ExecStop=/usr/bin/qdbus org.kde.klauncher5 /KLauncher org.kde.KLauncher.terminate_kdeinit
 KillMode=none
 BusName=org.kde.klauncher5
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" XDG_CURRENT_DESKTOP=KDE KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
