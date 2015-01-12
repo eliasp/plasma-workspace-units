@@ -6,4 +6,3 @@ Requires=kdeinit.service
 ExecStart=/usr/bin/kded5
 ExecStop=/usr/bin/kquitapp5 kded5
 BusName=org.kde.kded5
-Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" XDG_CURRENT_DESKTOP=KDE KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5

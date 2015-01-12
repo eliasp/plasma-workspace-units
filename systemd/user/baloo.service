@@ -7,7 +7,6 @@ ExecStart=/usr/bin/baloo_file
 ExecStop=/usr/bin/balooctl stop
 BusName=org.kde.baloo
 KillMode=none
-Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus" XDG_CURRENT_DESKTOP=KDE KDE_FULL_SESSION=1 KDE_SESSION_VERSION=5
 
 [Install]
 Alias=indexer.service
