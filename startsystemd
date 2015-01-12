@@ -1,19 +1,92 @@
 #!/bin/sh
 
-# make sure, the systemd user-session get's all env variables like DISPLAY, XAUTHORITY etc. first before launching any services
-systemctl --user import-environment
+LOGFILE=~/startsystemd.log
+function log() {
+    # Uncomment the following line to enable logging for debugging purposes
+    #echo "["$(date '+%F %T')"] "$@ >> ${LOGFILE}
+    true
+}
+
+rm ${LOGFILE}
+
+# reset the session environment file
+log "Removing session environment file"
+rm ${SESSION_ENV_FILE}
+log "Touching session environment file"
+touch ${SESSION_ENV_FILE}
+
+# import selected session environment variables into the systemd user
+# environment
+log "Importing existing environment variables"
+for ENV_VAR in DBUS_SESSION_BUS_ADDRESS \
+               DESKTOP_SESSION \
+               DISPLAY \
+               XAUTHORITY \
+               SESSION_MANAGER \
+               XDG_CONFIG_DIRS \
+               XDG_DATA_DIRS \
+               XDG_RUNTIME_DIR \
+               XDG_SEAT_PATH \
+               XDG_SEAT \
+               XDG_SESSION_CLASS \
+               XDG_SESSION_ID \
+               XDG_SESSION_PATH \
+               XDG_SESSION_TYPE \
+               XDG_VTNR;
+do
+    systemctl --user import-environment ${ENV_VAR}
+done
+
+# set selected session environment variables in the systemd user environment
+log "Setting new environment variables"
+for KEY_VAL in KDE_FULL_SESSION=true \
+               XDG_CURRENT_DESKTOP=KDE \
+               XDG_SESSION_DESKTOP=KDE \
+               KDE_SESSION_VERSION=5;
+do
+    systemctl --user set-environment ${KEY_VAL}
+done
+
+# before anything else happens, dbus.service needs to be restarted
+# otherwise any application which might be later started via dbus activation
+# won't see any of the environment variables we imported into the systemd
+# user environment
+log "Restarting dbus.service"
+systemctl --user restart dbus.service
 
 # if plasma-workspace.target is not enabled bail out
+log "Checking availability of plasma-workspace.target"
 systemctl --user is-enabled plasma-workspace.target || { xmessage "Please enable plasma-workspace.target"; exit 1; }
 
 #systemctl --user start kwin.service
+log "Starting plasma-workspace.target"
 systemctl --user start plasma-workspace.target
 
-# now this is so ugly, I'm not even ashamed of it... I'm proud of doing such ugly things...
-# to prevent X from terminating immediately at this point (as all 'systemctl' operations go to background), we have to make X
-# wait for something...
-# ... something
-read
-# ooooh, beautiful
+# this is a hackish workaround to solve a yet unclear behaviour:
+#   after starting the plasma-workspace.target, one would expect all dependent services
+#   to be starting/started and therefore to be returned as "true" by "systemctl is-active",
+#   but it seems that's not the case and ksmserver.service will only be reported as active
+#   once it fully started.
+#   So before we start watching the state of ksmserver.service, we'll give it some time to
+#   fully start
+#   I'm aware this is a non-deterministic approach and a hack, but for now this will work
+#   until the 'is-active' issue has been solved
+log "Sleeping for 25 seconds"
+sleep 25
 
+# now we're waiting for ksmserver.service to stop
+# once ksmserver.service stopped, we'll stop the plasma-workspace.target as well
+log "Waiting for ksmserver.service to terminate"
+while systemctl --user is-active ksmserver.service;
+do
+    log "ksmserver.service is still running"
+    # not really nice, but still better than blindly waiting for 'read' as before :)
+    # it would be even better if there was something like 'systemctl wait-for stop ksmserver.service'
+    # to prevent having to spawn a new 'sleep' every 5 seconds, but just as the hack above, this will
+    # work for now
+    sleep 5
+done
+log "ksmserver.service stopped running"
+
+log "Stopping plasma-workspace.target"
 systemctl --user stop plasma-workspace.target
