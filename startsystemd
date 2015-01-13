@@ -62,31 +62,5 @@ systemctl --user is-enabled plasma-workspace.target || { xmessage "Please enable
 log "Starting plasma-workspace.target"
 systemctl --user start plasma-workspace.target
 
-# this is a hackish workaround to solve a yet unclear behaviour:
-#   after starting the plasma-workspace.target, one would expect all dependent services
-#   to be starting/started and therefore to be returned as "true" by "systemctl is-active",
-#   but it seems that's not the case and ksmserver.service will only be reported as active
-#   once it fully started.
-#   So before we start watching the state of ksmserver.service, we'll give it some time to
-#   fully start
-#   I'm aware this is a non-deterministic approach and a hack, but for now this will work
-#   until the 'is-active' issue has been solved
-log "Sleeping for 25 seconds"
-sleep 25
-
-# now we're waiting for ksmserver.service to stop
-# once ksmserver.service stopped, we'll stop the plasma-workspace.target as well
-log "Waiting for ksmserver.service to terminate"
-while systemctl --user is-active ksmserver.service;
-do
-    log "ksmserver.service is still running"
-    # not really nice, but still better than blindly waiting for 'read' as before :)
-    # it would be even better if there was something like 'systemctl wait-for stop ksmserver.service'
-    # to prevent having to spawn a new 'sleep' every 5 seconds, but just as the hack above, this will
-    # work for now
-    sleep 5
-done
-log "ksmserver.service stopped running"
-
-log "Stopping plasma-workspace.target"
-systemctl --user stop plasma-workspace.target
+#now lets wait and watch beautiful plasma
+read
