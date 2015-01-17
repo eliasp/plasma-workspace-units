@@ -87,6 +87,3 @@ do
     sleep 5
 done
 log "ksmserver.service stopped running"
-
-log "Stopping plasma-workspace.target"
-systemctl --user stop plasma-workspace.target
