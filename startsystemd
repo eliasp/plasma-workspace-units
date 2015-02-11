@@ -47,6 +47,10 @@ do
     systemctl --user set-environment ${KEY_VAL}
 done
 
+export QT_MESSAGE_PATTERN='%{appname}(%{pid})/%{category} %{function}: %{message}'
+
+systemctl --user import-environment QT_MESSAGE_PATTERN
+
 # before anything else happens, dbus.service needs to be restarted
 # otherwise any application which might be later started via dbus activation
 # won't see any of the environment variables we imported into the systemd
