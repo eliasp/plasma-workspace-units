@@ -47,7 +47,7 @@ do
     systemctl --user set-environment ${KEY_VAL}
 done
 
-export QT_MESSAGE_PATTERN='%{appname}(%{pid})/%{category} %{function}: %{message}'
+export QT_MESSAGE_PATTERN='%{category} %{function}: %{message}'
 
 systemctl --user import-environment QT_MESSAGE_PATTERN
 
