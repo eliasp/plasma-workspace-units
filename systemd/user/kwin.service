@@ -1,5 +1,5 @@
 [Unit]
-Description=KDE Window Manager 
+Description=KDE Window Manager
 Requires=kglobalaccel.service kded.service
 
 [Service]

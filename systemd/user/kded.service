@@ -1,5 +1,5 @@
 [Unit]
-Description=KDE 'kded' - TODO 
+Description=KDE Service Manager
 Requires=kdeinit.service
 
 [Service]
