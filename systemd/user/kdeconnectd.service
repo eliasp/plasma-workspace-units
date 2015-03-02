@@ -1,0 +1,7 @@
+[Unit]
+Description=Connect your computer to your smartphone or tablet
+
+[Service]
+ExecStart=/usr/lib64/libexec/kdeconnectd
+ExecStop=/usr/bin/kquitapp5 kdeconnectd
+BusName=org.kde.kdeconnect
