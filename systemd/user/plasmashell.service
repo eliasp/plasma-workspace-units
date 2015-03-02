@@ -1,6 +1,6 @@
 [Unit]
 Description=KDE Plasma Workspace
-Requires=ksmserver.service kuiserver.service kded.service kactivitymanagerd.service
+Requires=ksmserver.service kuiserver.service kded.service kactivitymanagerd.service kglobalaccel.service
 
 [Service]
 ExecStart=/usr/bin/plasmashell --no-respawn

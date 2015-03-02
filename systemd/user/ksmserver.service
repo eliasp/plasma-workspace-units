@@ -1,5 +1,6 @@
 [Unit]
 Description=KDE Session Management Server
+Requires=kglobalaccel.service
 
 [Service]
 ExecStart=/usr/bin/ksmserver

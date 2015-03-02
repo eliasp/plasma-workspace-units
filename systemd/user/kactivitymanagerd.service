@@ -1,6 +1,6 @@
 [Unit]
 Description=KDE Plasma Workspace Activity Manager
-Before=plasmashell.service window-manager.service
+Before=plasmashell.service window-manager.service kglobalaccel.service
 
 [Service]
 ExecStart=/usr/bin/kactivitymanagerd start-daemon
