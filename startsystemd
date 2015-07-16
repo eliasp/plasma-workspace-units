@@ -18,8 +18,7 @@ touch ${SESSION_ENV_FILE}
 # import selected session environment variables into the systemd user
 # environment
 log "Importing existing environment variables"
-for ENV_VAR in DBUS_SESSION_BUS_ADDRESS \
-               DESKTOP_SESSION \
+for ENV_VAR in DESKTOP_SESSION \
                DISPLAY \
                XAUTHORITY \
                SESSION_MANAGER \
@@ -48,21 +47,12 @@ do
 done
 
 export QT_MESSAGE_PATTERN='%{category} %{function}: %{message}'
-
 systemctl --user import-environment QT_MESSAGE_PATTERN
-
-# before anything else happens, dbus.service needs to be restarted
-# otherwise any application which might be later started via dbus activation
-# won't see any of the environment variables we imported into the systemd
-# user environment
-log "Restarting dbus.service"
-systemctl --user restart dbus.service
 
 # if plasma-workspace.target is not enabled bail out
 log "Checking availability of plasma-workspace.target"
 systemctl --user is-enabled plasma-workspace.target || { xmessage "Please enable plasma-workspace.target"; exit 1; }
 
-#systemctl --user start kwin.service
 log "Starting plasma-workspace.target"
 systemctl --user start plasma-workspace.target
 
@@ -91,3 +81,5 @@ do
     sleep 5
 done
 log "ksmserver.service stopped running"
+
+exit 0
