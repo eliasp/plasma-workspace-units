@@ -1,3 +1,4 @@
 [D-BUS Service]
 Name=org.kde.kwalletd5
+Exec=/usr/bin/kwalletd5
 SystemdService=kwalletd.service
