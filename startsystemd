@@ -7,13 +7,17 @@ function log() {
     true
 }
 
-rm ${LOGFILE}
+if [ -f ${LOGFILE} ]; then
+    rm ${LOGFILE}
+fi
 
-# reset the session environment file
-log "Removing session environment file"
-rm ${SESSION_ENV_FILE}
-log "Touching session environment file"
-touch ${SESSION_ENV_FILE}
+if [ -f ${SESSION_ENV_FILE} ]; then
+    # reset the session environment file
+    log "Removing session environment file"
+    rm ${SESSION_ENV_FILE}
+    log "Touching session environment file"
+    touch ${SESSION_ENV_FILE}
+fi
 
 # import selected session environment variables into the systemd user
 # environment
