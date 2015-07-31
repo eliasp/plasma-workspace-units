@@ -1,3 +1,4 @@
 [D-BUS Service]
 Name=org.kde.plasmashell
+Exec=/usr/bin/plasmashell
 SystemdService=plasmashell.service
