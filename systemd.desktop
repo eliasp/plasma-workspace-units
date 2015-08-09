@@ -2,6 +2,7 @@
 Version=1.0
 Name=systemd user-session
 Name[es]=Sesión de usuario de systemd
+Name[gl]=Sesión de usuario de systemd
 Name[nl]=systemd gebruikerssessie
 Name[pt]=Sessão de utilizador do systemd
 Name[pt_BR]=Sessão de usuário do systemd
@@ -11,6 +12,7 @@ Name[uk]=Сеанс користувача systemd
 Name[x-test]=xxsystemd user-sessionxx
 Comment=Run a systemd user-session
 Comment[es]=Ejecutar una sesión de usuario de systemd
+Comment[gl]=Executar unha sesión de usuario de systemd
 Comment[nl]=Een systemd gebruikerssessie uitvoeren
 Comment[pt]=Executa uma sessão de utilizador do systemd
 Comment[pt_BR]=Executa uma sessão de usuário do systemd
