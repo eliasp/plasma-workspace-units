@@ -1,6 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Name=systemd user-session
+Name[de]=systemd-Benutzersitzung
 Name[es]=Sesión de usuario de systemd
 Name[fi]=systemd user-session
 Name[gl]=Sesión de usuario de systemd
@@ -12,6 +13,7 @@ Name[sv]=systemd användarsession
 Name[uk]=Сеанс користувача systemd
 Name[x-test]=xxsystemd user-sessionxx
 Comment=Run a systemd user-session
+Comment[de]=Startet eine systemd-Benutzersitzung
 Comment[es]=Ejecutar una sesión de usuario de systemd
 Comment[fi]=Suorita systemd user-session
 Comment[gl]=Executar unha sesión de usuario de systemd
