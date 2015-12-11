@@ -7,6 +7,7 @@ ExecStart=/usr/bin/baloo_file
 ExecStop=/usr/bin/balooctl stop
 BusName=org.kde.baloo
 KillMode=none
+Restart=on-failure # Baloo exits if it is disabled - prevent restart loops
 
 [Install]
 Alias=indexer.service
